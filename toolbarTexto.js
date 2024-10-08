@@ -48,7 +48,6 @@ function salvarDestaque(palavra, corFundo, corTexto, containerId, elementoIndex,
     });
 }
 
-// Função para aplicar o destaque ao texto selecionado
 async function aplicarDestaqueSelecionado(corFundo, corTexto = 'black', estiloTexto = '') {
     if (selectedRange) {
         const configuracao = await toolbarConfig();
@@ -56,6 +55,12 @@ async function aplicarDestaqueSelecionado(corFundo, corTexto = 'black', estiloTe
         let elementosSelecionaveis = configuracao.toolbar_actions.elementos_marcacao;
 
         const selection = window.getSelection();
+        // Adicione uma verificação se a seleção tem um range antes de clonar
+        if (!selection.rangeCount) {
+            console.error('Nenhum range encontrado para clonar.');
+            return;
+        }
+
         const range = selectedRange.cloneRange(); // Clonar o range para preservar a seleção
 
         const startContainer = range.startContainer;
@@ -171,25 +176,18 @@ async function aplicarDestaqueSelecionado(corFundo, corTexto = 'black', estiloTe
     }
 }
 
-// Evento para exibir a toolbar após seleção de texto
 document.addEventListener('mouseup', async function (e) {
     const selection = window.getSelection();
     const textoSelecionado = selection.toString().trim();
     const toolbar = document.getElementById('toolbar');
 
     const configuracao = await toolbarConfig();
-    // console.log(configuracao)
-
-    // Variáveis de controle
     const elementosSelecionaveis = configuracao.toolbar_actions.elementos_selecao; // Elementos que podem ser selecionados
     const classesPermitidas = ['editar']; // Classes permitidas para exibir a toolbar
     let selecionarTodosElementos = configuracao.toolbar_configuracao.selecionarTodosElementos; // Mudar para true para selecionar múltiplos elementos
 
-    // console.log(configuracao)
-
-    if (textoSelecionado) {
+    if (textoSelecionado && selection.rangeCount > 0) { // Verificar se há um range válido
         const range = selection.getRangeAt(0);
-       
         const startContainer = range.startContainer;
         const endContainer = range.endContainer;
 
@@ -229,10 +227,6 @@ document.addEventListener('mouseup', async function (e) {
                 toolbar.style.top = `${topPosition}px`;
                 toolbar.style.display = 'block';
 
-                // Salvar as posições calculadas para que a toolbar não mude de posição ao abrir a caixa de cores
-                toolbar.dataset.left = leftPosition;
-                toolbar.dataset.top = topPosition;
-
                 // Salvar o range selecionado para ser usado posteriormente
                 selectedRange = selection.getRangeAt(0);
             } else {
@@ -261,10 +255,6 @@ document.addEventListener('mouseup', async function (e) {
                 toolbar.style.top = `${topPosition}px`;
                 toolbar.style.display = 'block';
 
-                // Salvar as posições calculadas para que a toolbar não mude de posição ao abrir a caixa de cores
-                toolbar.dataset.left = leftPosition;
-                toolbar.dataset.top = topPosition;
-
                 // Salvar o range selecionado para ser usado posteriormente
                 selectedRange = selection.getRangeAt(0);
             }
@@ -274,9 +264,6 @@ document.addEventListener('mouseup', async function (e) {
             selectedRange = null; // Limpar o range salvo
         }
     }
-    // else{
-    //     console.log("Sem Texto Selecionado...")
-    // }
 });
 
 // Ocultar toolbar ao clicar fora dela
@@ -423,31 +410,47 @@ function deletarMarcacao() {
         return;
     }
 
-    // Capturar o elemento pai
-    const elementoPai = range.startContainer.parentElement.closest('p');
-    if (!elementoPai) {
-        console.log('Nenhum parágrafo encontrado.');
-        return;
+    // Obter o commonAncestorContainer e garantir que seja um elemento, não um nó de texto
+    let commonAncestor = range.commonAncestorContainer;
+    if (commonAncestor.nodeType === 3) { // Se for um nó de texto
+        commonAncestor = commonAncestor.parentElement; // Pegar o elemento pai
     }
 
-    // Encontrar todos os marcadores dentro do range de seleção
-    const marcadores = elementoPai.querySelectorAll('[data-id]');
-
-    // Verificar e remover todos os marcadores encontrados dentro do range
-    marcadores.forEach((marcador) => {
-        if (range.intersectsNode(marcador)) {
-            const dataId = marcador.getAttribute('data-id');
-            console.log(`Removendo marcador com data-id: ${dataId}`);
-
-            // Criar um nó de texto com o conteúdo dentro do marcador
-            const textoMarcador = document.createTextNode(marcador.textContent);
-
-            // Substituir o marcador pelo seu conteúdo textual
-            marcador.parentNode.replaceChild(textoMarcador, marcador);
-
-            // Remover o marcador da base de dados usando LocalDB.js
-            removerMarcadorDoLocalDB(dataId);
+    // Capturar todos os nós dentro do range de seleção
+    const walker = document.createTreeWalker(commonAncestor, NodeFilter.SHOW_ELEMENT, {
+        acceptNode: (node) => {
+            return NodeFilter.FILTER_ACCEPT;
         }
+    });
+
+    const elementosSelecionados = [];
+    let currentNode = walker.currentNode;
+
+    while (currentNode) {
+        if (range.intersectsNode(currentNode)) {
+            elementosSelecionados.push(currentNode);
+        }
+        currentNode = walker.nextNode();
+    }
+
+    // Percorrer todos os elementos selecionados e remover os marcadores
+    elementosSelecionados.forEach(elemento => {
+        const marcadores = elemento.querySelectorAll('[data-id]');
+        marcadores.forEach(marcador => {
+            if (range.intersectsNode(marcador)) {
+                const dataId = marcador.getAttribute('data-id');
+                console.log(`Removendo marcador com data-id: ${dataId}`);
+
+                // Criar um nó de texto com o conteúdo dentro do marcador
+                const textoMarcador = document.createTextNode(marcador.textContent);
+
+                // Substituir o marcador pelo seu conteúdo textual
+                marcador.parentNode.replaceChild(textoMarcador, marcador);
+
+                // Remover o marcador da base de dados usando LocalDB.js
+                removerMarcadorDoLocalDB(dataId);
+            }
+        });
     });
 
     // Limpar a seleção após o processamento
@@ -461,10 +464,10 @@ function removerMarcadorDoLocalDB(dataId) {
         if (Array.isArray(items) && items.length > 0) {
             items.forEach((item) => {
                 item.delete(); // Remover o item da base de dados
-                // console.log(`Marcador com id ${item.id} removido da base de dados.`);
+                console.log(`Marcador com id ${item.id} removido da base de dados.`);
             });
         } else {
-            // console.log(`Nenhum marcador encontrado com o id ${dataId} na base de dados.`);
+            console.log(`Nenhum marcador encontrado com o id ${dataId} na base de dados.`);
         }
     });
 }
