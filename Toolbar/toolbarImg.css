@@ -1,0 +1,57 @@
+.selecionarImg{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    width: auto;
+    background: #ff0077;
+    padding: 1rem;
+    margin: 1rem;
+    color: white; 
+}
+
+.selecionarImg img{
+    width: 30%;
+    margin: 0 auto;
+    border-radius: 1rem;
+}
+
+.selecionarImg {
+    position: relative;
+    display: inline-block;
+    margin: 20px;
+}
+
+.selecionarImg img {
+    display: block;
+    width:300px;
+    height:200px;
+    border-radius: 8px;
+}
+
+.toolbarImg {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: none; /* Esconde a toolbar inicialmente */
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.toolbarImg button {
+    background-color: #fff;
+    border: none;
+    color: black;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.toolbarImg button:hover {
+    background-color: #ddd;
+}
+
+.selecionarImg:hover .toolbarImg {
+    display: block; /* Mostra a toolbar ao passar o mouse sobre a imagem */
+}
