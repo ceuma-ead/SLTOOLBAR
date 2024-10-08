@@ -468,7 +468,7 @@ function removerMarcadorDoLocalDB(dataId) {
             items.forEach((item) => {
                 item.delete(); // Remover o item da base de dados
                 console.log(`Marcador com id ${item.id} removido da base de dados.`);
-                setTimeout(()=>window.location.reload(),100)
+                setTimeout(()=>window.location.reload(),0)
             });
         } else {
             console.log(`Nenhum marcador encontrado com o id ${dataId} na base de dados.`);

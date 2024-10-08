@@ -1,79 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toolbar de Seleção</title>
-    <link rel="stylesheet" href="./Toolbar/toolbarTexto.css">
-    <link rel="stylesheet" href="./Toolbar/toolbarImg.css">
-    <script type="text/javascript" src="./plugin/localdb/src/LocalDB.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Toolbar de Seleção</title>
+        <link rel="stylesheet" href="./Toolbar/toolbarTexto.css">
+        <link rel="stylesheet" href="./Toolbar/toolbarImg.css">
+        <script type="text/javascript"
+            src="./plugin/localdb/src/LocalDB.js"></script>
+    </head>
 
-<body>
-    <div class="editar">
-        <p> 01 Selecione algum texto nesta página para ver a toolbar.</p>
-        <p> 02 Selecione algum texto nesta página para ver a toolbar.</p>
-    </div>
-
-    <div class="editarParagrafo">
-        <p> 03 Selecione algum texto nesta página para ver a toolbar.</p>
-        <p> 04 Selecione algum texto nesta página para ver a toolbar.</p>
-    </div>
-
-    <div class="editar">
-        <p> 05 Selecione algum texto nesta página para ver a toolbar.</p>
-        <p> 06 Selecione algum texto nesta página para ver a toolbar.</p>
-    </div>
-
-    <div class="editarParagrafo">
-        <p> 07 Selecione algum texto nesta página para ver a toolbar.</p>
-        <p> 08 Selecione algum texto nesta página para ver a toolbar.</p>
-    </div>
-
-    <div class="editar">
-        <p> 09 Selecione algum texto nesta página para ver a toolbar.</p>
-        <p> 10 Selecione algum texto nesta página para ver a toolbar.</p>
-    </div>
-
-    <div class="selecionarImg">
-        <img src="./img/morango.jpg">
-        <div class="toolbarImg">
-            <button class="lerBtn"><i data-lucide="scan-search"></i></button>
+    <body>
+        <div class="editar">
+            <p> 01 Selecione algum texto nesta página para ver a toolbar.</p>
+            <p> 02 Selecione algum texto nesta página para ver a toolbar.</p>
         </div>
-    </div>
-    
-    <div class="selecionarImg">
-        <img src="./img/passaro.png">
-        <div class="toolbarImg">
-            <button class="lerBtn"><i data-lucide="scan-search"></i></button>
-        </div>
-    </div>
 
-    <div id="toolbar" style="display: none; position: absolute;">
-        <div class="toolbar-container">
-            <div class="box-marca-cores" id="boxMarcaCores" style="display: none;">
-                <div class="cores-destaque">
-                    <span class="corTexto" style="background-color: red;" data-cor="red" data-color="white"></span>
-                    <span class="corTexto" style="background-color: green;" data-cor="green"  data-color="white"></span>
-                    <span class="corTexto" style="background-color: blue;" data-cor="blue"  data-color="white"></span>
+        <div class="editarParagrafo">
+            <p> 03 Selecione algum texto nesta página para ver a toolbar.</p>
+            <p> 04 Selecione algum texto nesta página para ver a toolbar.</p>
+        </div>
+
+        <div class="editar">
+            <p> 05 Selecione algum texto nesta página para ver a toolbar.</p>
+            <p> 06 Selecione algum texto nesta página para ver a toolbar.</p>
+        </div>
+
+        <div class="editarParagrafo">
+            <p> 07 Selecione algum texto nesta página para ver a toolbar.</p>
+            <p> 08 Selecione algum texto nesta página para ver a toolbar.</p>
+        </div>
+
+        <div class="editar">
+            <p> 09 Selecione algum texto nesta página para ver a toolbar.</p>
+            <p> 10 Selecione algum texto nesta página para ver a toolbar.</p>
+        </div>
+
+        <div style="display: flex;align-items:center;justify-content:center;">
+            <div class="selecionarImg">
+                <img src="./img/morango.jpg">
+                <div class="toolbarImg">
+                    <button class="lerBtn"><i
+                            data-lucide="scan-search"></i></button>
                 </div>
             </div>
-            <button class="toolbar-button" id="resumo"><i data-lucide="file-text"></i> Resumo</button>
-            <button class="toolbar-button" id="destacar"><i data-lucide="pencil"></i> Destacar</button>
-            <button class="toolbar-button" id="dicionario-toolbar"><i data-lucide="search"></i> Dicionário</button>
-            <button class="toolbar-button" id="limpar"><i data-lucide="eraser"></i> Limpar</button>
+
+            <div class="selecionarImg">
+                <img src="./img/passaro.png">
+                <div class="toolbarImg">
+                    <button class="lerBtn"><i
+                            data-lucide="scan-search"></i></button>
+                </div>
+            </div>
+
+            
+            
         </div>
-    </div>
 
-    <script src="./toolbarTexto.js"></script>
-    <script src="./toolbarImg.js"></script>
+        <div id="toolbar" style="display: none; position: absolute;">
+            <div class="toolbar-container">
+                <div class="box-marca-cores" id="boxMarcaCores"
+                    style="display: none;">
+                    <div class="cores-destaque">
+                        <span class="corTexto" style="background-color: red;"
+                            data-cor="red" data-color="white"></span>
+                        <span class="corTexto" style="background-color: green;"
+                            data-cor="green" data-color="white"></span>
+                        <span class="corTexto" style="background-color: blue;"
+                            data-cor="blue" data-color="white"></span>
+                    </div>
+                </div>
+                <button class="toolbar-button" id="resumo"><i
+                        data-lucide="file-text"></i> Resumo</button>
+                <button class="toolbar-button" id="destacar"><i
+                        data-lucide="pencil"></i> Destacar</button>
+                <button class="toolbar-button" id="dicionario-toolbar"><i
+                        data-lucide="search"></i> Dicionário</button>
+                <button class="toolbar-button" id="limpar"><i
+                        data-lucide="eraser"></i> Limpar</button>
+            </div>
+        </div>
 
-    <!-- Production version -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
+        <script src="./toolbarTexto.js"></script>
+        <script src="./toolbarImg.js"></script>
+
+        <!-- Production version -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <script>
         lucide.createIcons();
     </script>
-</body>
+    </body>
 
 </html>
