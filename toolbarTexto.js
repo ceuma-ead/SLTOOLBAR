@@ -45,6 +45,7 @@ function salvarDestaque(palavra, corFundo, corTexto, containerId, elementoIndex,
     // Salva o destaque individualmente
     databaseDestaques.save(destaque, function(_item){
         // console.log('Destaque Salvo: ', _item);
+        restaurarDestaques();
     });
 }
 
@@ -390,6 +391,7 @@ document.querySelectorAll('.editar, .editarParagrafo').forEach((element, index) 
 // Função para deletar todos os marcadores dentro da seleção
 function deletarMarcacao() {
     const selection = window.getSelection();
+    restaurarDestaques()
 
     // Verificação inicial para garantir que há uma seleção válida
     if (!selection || selection.rangeCount === 0) {
@@ -460,11 +462,13 @@ function deletarMarcacao() {
 // Função para remover o marcador da base de dados usando LocalDB.js
 function removerMarcadorDoLocalDB(dataId) {
     databaseDestaques.find({ id: dataId }, function (items) {
+        
         // Verificar se existem itens correspondentes na base de dados
         if (Array.isArray(items) && items.length > 0) {
             items.forEach((item) => {
                 item.delete(); // Remover o item da base de dados
                 console.log(`Marcador com id ${item.id} removido da base de dados.`);
+                setTimeout(()=>window.location.reload(),100)
             });
         } else {
             console.log(`Nenhum marcador encontrado com o id ${dataId} na base de dados.`);
